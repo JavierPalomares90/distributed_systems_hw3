@@ -47,7 +47,7 @@ public class TextAnalyzer extends Configured implements Tool {
             // Write out the results; you may change the following example
             // code to fit with your reducer function.
             //   Write out each edge and its weight
-	    Text value = new Text();
+            Text value = new Text();
             for(String neighbor: map.keySet()){
                 String weight = map.get(neighbor).toString();
                 value.set(" " + neighbor + " " + weight);
@@ -62,16 +62,17 @@ public class TextAnalyzer extends Configured implements Tool {
         Configuration conf = this.getConf();
 
         // Create job
-        Job job = new Job(conf, "EID1_EID2"); // Replace with your EIDs
+        Job job = new Job(conf, "jp46396_eid2"); // TODO: Replace with Matt's EID
         job.setJarByClass(TextAnalyzer.class);
 
         // Setup MapReduce job
         job.setMapperClass(TextMapper.class);
         
-	// set local combiner class
+        // set local combiner class
         job.setCombinerClass(TextCombiner.class);
-	// set reducer class        
-	job.setReducerClass(TextReducer.class);
+
+        // set reducer class        
+        job.setReducerClass(TextReducer.class);
 
         // Specify key / value types (Don't change them for the purpose of this assignment)
         job.setOutputKeyClass(Text.class);
@@ -99,10 +100,57 @@ public class TextAnalyzer extends Configured implements Tool {
         System.exit(res);
     }
 
-    // You may define sub-classes here. Example:
-    // public static class MyClass {
-    //
-    // }
+    // Class to represent the nodes in the graph. Each node represent a word in the file
+    public static class Node
+    {
+        private String word;
+
+        public Node(String word)
+        {
+            this.setWord(word);
+        }
+
+        public Node()
+        {
+        }
+
+        public void setWord(String word)
+        {
+            this.word = word;
+        }
+
+        public String getWord()
+        {
+            return this.word;
+        }
+    }
+
+    // Class to represent the edges in the nodes.
+    public static class Edge
+    {
+        private Node u;
+        private Node v;
+        private int weight;
+
+        public Edge(Node n1,Node n2, int weight)
+        {
+            this.u = n1;
+            this.v = n2;
+            this.weight = weight;
+        }
+
+        public int getWeight()
+        {
+            return this.weight;
+        }
+
+        public void setWeight(int weight)
+        {
+            this.weight = weight;
+        }
+
+    }
+
 }
 
 
