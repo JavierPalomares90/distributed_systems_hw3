@@ -115,10 +115,62 @@ public class TextAnalyzer extends Configured implements Tool
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
-    -    // Do not modify the main method
+    // Do not modify the main method
     public static void main(String[] args) throws Exception 
     {
         int res = ToolRunner.run(new Configuration(), new TextAnalyzer(), args);
         System.exit(res);
+    }
+
+
+     // Class to represent the nodes in the graph. Each node represent a word in the file
+    public static class Node
+    {
+        private String word;
+
+        public Node(String word)
+        {
+            this.setWord(word);
+        }
+
+        public Node()
+        {
+        }
+
+        public void setWord(String word)
+        {
+            this.word = word;
+        }
+
+        public String getWord()
+        {
+            return this.word;
+        }
+    }
+
+    // Class to represent the edges in the nodes.
+    public static class Edge
+    {
+        private Node u;
+        private Node v;
+        private int weight;
+
+        public Edge(Node n1,Node n2, int weight)
+        {
+            this.u = n1;
+            this.v = n2;
+            this.weight = weight;
+        }
+
+        public int getWeight()
+        {
+            return this.weight;
+        }
+
+        public void setWeight(int weight)
+        {
+            this.weight = weight;
+        }
+
     }
 }
