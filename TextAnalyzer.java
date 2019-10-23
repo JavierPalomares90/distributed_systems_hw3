@@ -115,4 +115,10 @@ public class TextAnalyzer extends Configured implements Tool
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
+    -    // Do not modify the main method
+    public static void main(String[] args) throws Exception 
+    {
+        int res = ToolRunner.run(new Configuration(), new TextAnalyzer(), args);
+        System.exit(res);
+    }
 }
