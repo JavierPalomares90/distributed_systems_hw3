@@ -88,19 +88,14 @@ public class TextAnalyzer extends Configured implements Tool
             throws IOException, InterruptedException
         {
             // Implementation of you reducer function
-           Map<String,Integer> map = null;
 
-            // Write out the results; you may change the following example
-            // code to fit with your reducer function.
-            //   Write out each edge and its weight
-            Text value = new Text();
-            for(String neighbor: map.keySet()){
-                String weight = map.get(neighbor).toString();
-                value.set(" " + neighbor + " " + weight);
-                context.write(new text(key.toString()), value);
+            int sum = 0;
+            for (IntWritable value:values)
+            {
+                sum += value.get();
             }
-            //   Empty line for ending the current context key
-            context.write(emptyText, emptyText);
+            String value = " " + sum;
+            context.write(new Text(key.toString()), new Text(value));
         }
     }
 
@@ -143,6 +138,9 @@ public class TextAnalyzer extends Configured implements Tool
     // Do not modify the main method
     public static void main(String[] args) throws Exception 
     {
+        /**
+         * TODO: TEST EVERYTHING!!!!
+         */
         int res = ToolRunner.run(new Configuration(), new TextAnalyzer(), args);
         System.exit(res);
     }
@@ -291,7 +289,7 @@ public class TextAnalyzer extends Configured implements Tool
         @Override
         public String toString()
         {
-            return "WordTuple [word1=" +word1+",word2="+word2+"]";
+            return ""+word1+","+word2;
         }
 
         @Override
