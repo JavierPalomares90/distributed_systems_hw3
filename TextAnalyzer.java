@@ -220,6 +220,14 @@ public class TextAnalyzer extends Configured implements Tool
         @Override
         public void readFields(DataInput in) throws IOException
         {
+            if(word1 == null)
+            {
+                word1 = new Text();
+            }
+            if(word2 == null)
+            {
+                word2 = new Text();
+            }
             word1.readFields(in);
             word2.readFields(in);
         }
@@ -227,6 +235,14 @@ public class TextAnalyzer extends Configured implements Tool
         @Override
         public void write(DataOutput out) throws IOException
         {
+            if(word1 == null)
+            {
+                word1 = new Text();
+            }
+            if(word2 == null)
+            {
+                word2 = new Text();
+            }
             word1.write(out);
             word2.write(out);
         }
