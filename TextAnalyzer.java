@@ -67,20 +67,24 @@ public class TextAnalyzer extends Configured implements Tool
 
     // Replace "?" with your own key / value types
     // NOTE: combiner's output key / value types have to be the same as those of mapper
-    public static class TextCombiner extends Reducer<LongWritable, Text, Text, Text> {
-        public void reduce(Text key, Iterable<TupleWritable> tuples, Context context)
-            throws IOException, InterruptedException
+    public static class TextCombiner extends Reducer<LongWritable, Text, WordTuple, IntWritable> {
+        public void reduce(WordTuple key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException
         {
-            // Implementation of you combiner function
+            int sum = 0;
+            for (IntWritable value:values)
+            {
+                sum += value.get();
+            }
+            context.write(key,new IntWritable(sum));
         }
     }
 
     // Replace "?" with your own input key / value types, i.e., the output
     // key / value types of your mapper function
-    public static class TextReducer extends Reducer<Text, Text, Text, Text> {
+    public static class TextReducer extends Reducer<WordTuple, IntWritable, Text, Text> {
         private final static Text emptyText = new Text("");
 
-        public void reduce(Text key, Iterable<TupleWritable> queryTuples, Context context)
+        public void reduce(WordTuple key, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException
         {
             // Implementation of you reducer function
@@ -93,7 +97,7 @@ public class TextAnalyzer extends Configured implements Tool
             for(String neighbor: map.keySet()){
                 String weight = map.get(neighbor).toString();
                 value.set(" " + neighbor + " " + weight);
-                context.write(key, value);
+                context.write(new text(key.toString()), value);
             }
             //   Empty line for ending the current context key
             context.write(emptyText, emptyText);
