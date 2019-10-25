@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -40,6 +41,16 @@ public class TextAnalyzer extends Configured implements Tool
         public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException
         {
+            String line = value.toString();
+            StringTokenizer tokenizer = new StringTokenizer(line);
+            // Iterate over all the words in each line of the file
+            while(tokenizer.hasMoreTokens())
+            {
+
+
+
+            }
+
             // Implementation of you mapper function
         }
     }
@@ -148,7 +159,111 @@ public class TextAnalyzer extends Configured implements Tool
         }
     }
 
-    // Class to represent the edges in the nodes.
+    // Class to represent a tuple of words
+    public static class WordTuple
+    {
+        private String word1;
+        private String word2;
+
+        public WordTuple()
+        {}
+
+        public WordTuple(String str1, String str2)
+        {
+            this.word1 = str1;
+            this.word2 = str2;
+        }
+
+        public void setWord1(String str)
+        {
+            this.word1 = str;
+        }
+
+        public void setWord2(String str)
+        {
+            this.word2 = str;
+        }
+
+
+        public String getWord1()
+        {
+            return this.word1;
+        }
+
+        public String getWord2()
+        {
+            return this.word2;
+        }
+
+        private boolean compareWords(String word1,String word2)
+        {
+            if(word1 == null)
+            {
+                return word2 == null;
+            }
+
+            return word1.equals(word2);
+        }
+
+        @Override
+        public boolean equals(Object o)
+        {
+
+            // If the object is compared with itself then return true   
+            if (o == this) 
+            {
+                return true; 
+            } 
+  
+            if ((o instanceof WordTuple) == false) 
+            {
+                return false; 
+            } 
+
+            if(this == null || o == null)
+            {
+                return  this == o;
+            }
+
+            WordTuple other = (WordTuple) o;
+
+            boolean b1 = compareWords(this.word1, other.getWord1());
+            boolean b2 = compareWords(this.word2, other.getWord2());
+
+            if(b1 == true && b2 == true)
+            {
+                return true;
+            }
+            boolean b3 = compareWords(this.word1, other.getWord2());
+            boolean b4 = compareWords(this.word2, other.getWord1());
+            if(b3 == true && b4 == true)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = 17;
+            if(word1 != null)
+            {
+                result = 31 * result + word1.hashCode();
+            }
+            if(word2 != null)
+            {
+                result = 31 * result + word2.hashCode();
+            }
+
+            return result;
+
+        }
+
+
+    }
+
+    // Class to represent the edges in the graph.
     public static class Edge
     {
         private Node u;
