@@ -37,18 +37,26 @@ public class TextAnalyzer extends Configured implements Tool
      * For now, set them to Text just for compiliation purposes
      */
     //   <Input Key Type, Input Value Type, Output Key Type, Output Value Type>
-    public static class TextMapper extends Mapper<LongWritable, Text, Text, Text> {
+    public static class TextMapper extends Mapper<LongWritable, Text, WordTuple, IntWritable> {
+
+        private final static IntWritable ONE = new IntWritable(1);
+
         public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException
         {
             String line = value.toString();
-            StringTokenizer tokenizer = new StringTokenizer(line);
-            // Iterate over all the words in each line of the file
-            while(tokenizer.hasMoreTokens())
+            String[] words = line.split("\\s");
+            int numWords = words.length;
+            for(int i = 0; i  < numWords; i++)
             {
+                String word1 = words[i];
+                for(int j = i+1; j < numWords; j++)
+                {
+                    String word2 = words[j];
+                    WordTuple tuple = new WordTuple(word1,word2);
+                    // TODO: Write the tuple and one
 
-
-
+                }
             }
 
             // Implementation of you mapper function
