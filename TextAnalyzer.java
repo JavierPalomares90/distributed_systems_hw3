@@ -1,3 +1,5 @@
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -54,7 +57,7 @@ public class TextAnalyzer extends Configured implements Tool
                 for(int j = i+1; j < numWords; j++)
                 {
                     String word2 = words[j];
-                    WordTuple tuple = new WordTuple(word1,word2);
+                    WordTuple tuple = new WordTuple(new Text(word1),new Text(word2));
                     // TODO: Write the tuple and one
 
                 }
@@ -169,42 +172,42 @@ public class TextAnalyzer extends Configured implements Tool
     }
 
     // Class to represent a tuple of words
-    public static class WordTuple
+    public static class WordTuple implements WritableComparable<WordTuple>
     {
-        private String word1;
-        private String word2;
+        private Text word1;
+        private Text word2;
 
         public WordTuple()
         {}
 
-        public WordTuple(String str1, String str2)
+        public WordTuple(Text str1, Text str2)
         {
             this.word1 = str1;
             this.word2 = str2;
         }
 
-        public void setWord1(String str)
+        public void setWord1(Text str)
         {
             this.word1 = str;
         }
 
-        public void setWord2(String str)
+        public void setWord2(Text str)
         {
             this.word2 = str;
         }
 
 
-        public String getWord1()
+        public Text getWord1()
         {
             return this.word1;
         }
 
-        public String getWord2()
+        public Text getWord2()
         {
             return this.word2;
         }
 
-        private boolean compareWords(String word1,String word2)
+        private boolean compareWords(Text word1,Text word2)
         {
             if(word1 == null)
             {
@@ -212,6 +215,20 @@ public class TextAnalyzer extends Configured implements Tool
             }
 
             return word1.equals(word2);
+        }
+
+        @Override
+        public void readFields(DataInput in) throws IOException
+        {
+            word1.readFields(in);
+            word2.readFields(in);
+        }
+
+        @Override
+        public void write(DataOutput out) throws IOException
+        {
+            word1.write(out);
+            word2.write(out);
         }
 
         @Override
@@ -267,6 +284,34 @@ public class TextAnalyzer extends Configured implements Tool
 
             return result;
 
+        }
+
+        @Override
+        public String toString()
+        {
+            return "WordTuple [word1=" +word1+",word2="+word2+"]";
+        }
+
+        @Override
+        public int compareTo(WordTuple other)
+        {
+            if(other == null)
+            {
+                return 1;
+            }
+            if(word1 != null)
+            {
+                int comp = word1.compareTo(other.word1);
+                if(comp != 0)
+                {
+                    return comp;
+                }
+            }
+            if(word2 != null)
+            {
+                return word2.compareTo(other.word2);
+            }
+            return -1;
         }
 
 
