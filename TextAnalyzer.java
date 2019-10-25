@@ -58,12 +58,10 @@ public class TextAnalyzer extends Configured implements Tool
                 {
                     String word2 = words[j];
                     WordTuple tuple = new WordTuple(new Text(word1),new Text(word2));
-                    // TODO: Write the tuple and one
-
+                    context.write(tuple,ONE);
                 }
             }
 
-            // Implementation of you mapper function
         }
     }
 
