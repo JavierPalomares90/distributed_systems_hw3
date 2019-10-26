@@ -36,10 +36,6 @@ public class TextAnalyzer extends Configured implements Tool
 {
     // Replace "?" with your own output key / value types
     // The four template data types are:
-    /**
-     * TODO: Check these output types. They may not be correct. 
-     * For now, set them to Text just for compiliation purposes
-     */
     //   <Input Key Type, Input Value Type, Output Key Type, Output Value Type>
     public static class TextMapper extends Mapper<LongWritable, Text, WordTuple, IntWritable> {
 
@@ -54,10 +50,16 @@ public class TextAnalyzer extends Configured implements Tool
             for(int i = 0; i  < numWords; i++)
             {
                 String word1 = words[i];
+                Text text1 = new Text(word1);
                 for(int j = i+1; j < numWords; j++)
                 {
+                    // boundary condition
+                    if(j >= numWords + 1)
+                    {
+                        continue;
+                    }
                     String word2 = words[j];
-                    WordTuple tuple = new WordTuple(new Text(word1),new Text(word2));
+                    WordTuple tuple = new WordTuple(text1,new Text(word2));
                     context.write(tuple,ONE);
                 }
             }
