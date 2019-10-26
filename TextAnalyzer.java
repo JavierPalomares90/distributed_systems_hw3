@@ -287,7 +287,7 @@ public class TextAnalyzer extends Configured implements Tool
         {
             if(other == null)
             {
-                return 1;
+                return this==null? 0: 1;
             }
             if(word1 != null)
             {
