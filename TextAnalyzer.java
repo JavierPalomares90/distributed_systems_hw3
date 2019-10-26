@@ -145,32 +145,6 @@ public class TextAnalyzer extends Configured implements Tool
         System.exit(res);
     }
 
-
-     // Class to represent the nodes in the graph. Each node represent a word in the file
-    public static class Node
-    {
-        private String word;
-
-        public Node(String word)
-        {
-            this.setWord(word);
-        }
-
-        public Node()
-        {
-        }
-
-        public void setWord(String word)
-        {
-            this.word = word;
-        }
-
-        public String getWord()
-        {
-            return this.word;
-        }
-    }
-
     // Class to represent a tuple of words
     public static class WordTuple implements WritableComparable<WordTuple>
     {
@@ -330,32 +304,6 @@ public class TextAnalyzer extends Configured implements Tool
             return -1;
         }
 
-
-    }
-
-    // Class to represent the edges in the graph.
-    public static class Edge
-    {
-        private Node u;
-        private Node v;
-        private int weight;
-
-        public Edge(Node n1,Node n2, int weight)
-        {
-            this.u = n1;
-            this.v = n2;
-            this.weight = weight;
-        }
-
-        public int getWeight()
-        {
-            return this.weight;
-        }
-
-        public void setWeight(int weight)
-        {
-            this.weight = weight;
-        }
 
     }
 }
