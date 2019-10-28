@@ -45,7 +45,7 @@ public class TextAnalyzer extends Configured implements Tool
             throws IOException, InterruptedException
         {
             String line = value.toString();
-            String[] words = line.split("\\s");
+            String[] words = line.split(",|\'|\\s");
             int numWords = words.length;
             for(int i = 0; i  < numWords; i++)
             {
