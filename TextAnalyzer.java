@@ -45,6 +45,8 @@ public class TextAnalyzer extends Configured implements Tool
             throws IOException, InterruptedException
         {
             String line = value.toString().toLowerCase();
+            // replace anything that's not alphanumberic with a space
+            line = line.replaceAll("[^A-Za-z0-9 ]", " ");
             String[] words = line.split("\\W+");
             int numWords = words.length;
             for(int i = 0; i  < numWords; i++)
@@ -96,7 +98,7 @@ public class TextAnalyzer extends Configured implements Tool
             {
                 sum += value.get();
             }
-            String value = " " + sum;
+            String value = "" + sum;
             context.write(new Text(key.toString()), new Text(value));
         }
     }
