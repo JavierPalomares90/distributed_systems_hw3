@@ -44,7 +44,7 @@ public class TextAnalyzer extends Configured implements Tool
         public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException
         {
-            String line = value.toString();
+            String line = value.toString().toLowerCase();
             String[] words = line.split("\\W+");
             int numWords = words.length;
             for(int i = 0; i  < numWords; i++)
