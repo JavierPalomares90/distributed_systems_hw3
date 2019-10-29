@@ -281,7 +281,7 @@ public class TextAnalyzer extends Configured implements Tool
         @Override
         public String toString()
         {
-            return ""+word1+","+word2;
+            return ""+word1+" "+word2;
         }
 
         @Override
