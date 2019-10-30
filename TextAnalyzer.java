@@ -301,11 +301,11 @@ public class TextAnalyzer extends Configured implements Tool
             int result = 17;
             if(word1 != null)
             {
-                result = 31 * result + word1.hashCode();
+                result += word1.hashCode();
             }
             if(word2 != null)
             {
-                result = 31 * result + word2.hashCode();
+                result += word2.hashCode();
             }
 
             return result;
