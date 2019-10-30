@@ -44,10 +44,12 @@ public class TextAnalyzer extends Configured implements Tool
         public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException
         {
+            System.out.println("ORIGINAL: " + value.toString());
             String line = value.toString().toLowerCase();
             // replace anything that's not alphanumberic with a space
-            line = line.replaceAll("[^A-Za-z0-9 ]", " ");
-            String[] words = line.split("\\W+");
+            line = line.replaceAll("[^A-Za-z0-9]", " ");
+            System.out.println("TO SPLIT: " + line);
+            String[] words = line.split("\\s+");
             int numWords = words.length;
             for(int i = 0; i  < numWords; i++)
             {
@@ -60,7 +62,9 @@ public class TextAnalyzer extends Configured implements Tool
                     {
                         continue;
                     }
+	             
                     String word2 = words[j];
+                    System.out.println("word1: " + word1 + " word2: " + word2);
                     WordTuple tuple = new WordTuple(text1,new Text(word2));
                     context.write(tuple,ONE);
                 }
@@ -266,14 +270,14 @@ public class TextAnalyzer extends Configured implements Tool
         @Override
         public int hashCode()
         {
-            int result = 17;
+            int result = 0;
             if(word1 != null)
             {
-                result = 31 * result + word1.hashCode();
+                result += word1.hashCode();
             }
             if(word2 != null)
             {
-                result = 31 * result + word2.hashCode();
+                result += word2.hashCode();
             }
 
             return result;
@@ -292,6 +296,10 @@ public class TextAnalyzer extends Configured implements Tool
             if(other == null)
             {
                 return this==null? 0: 1;
+            }
+	    if(this.equals(other) == true)
+            {
+	        return 0;
             }
             if(word1 != null)
             {
