@@ -44,23 +44,55 @@ public class TextAnalyzer extends Configured implements Tool
         public void map(LongWritable key, Text value, Context context)
             throws IOException, InterruptedException
         {
-            String line = value.toString().toLowerCase();
-            // replace anything that's not alphanumberic with a space
-            line = line.replaceAll("[^A-Za-z0-9 ]", " ");
-            String[] words = line.split("\\W+");
+            String line = value.toString();
+            line = line.toLowerCase();
+            line = line.replaceAll("\\W+", " ");
+
+            String[] words = line.split("[\\s\\xA0]+");
             int numWords = words.length;
+
+            HashMap<String, Integer> m = new HashMap<>();
+
             for(int i = 0; i  < numWords; i++)
             {
+
+                if(m.containsKey(words[i]))
+                {
+                    continue;
+                }
+                else
+                {
+                    m.put(words[i], 1);
+                }
+
+                HashMap<String, Integer> n = new HashMap<>();
+
                 String word1 = words[i];
                 Text text1 = new Text(word1);
-                for(int j = i+1; j < numWords; j++)
+                for(int j = 0; j < numWords; j++)
                 {
+                    if(n.containsKey(words[j]))
+                    {
+                        continue;
+                    }
+                        else
+                    {
+                        n.put(words[j], 1);
+                    }
+                    if(word1.equals(""))
+                        continue;
                     // boundary condition
                     if(j >= numWords + 1)
                     {
                         continue;
                     }
+
                     String word2 = words[j];
+                    if(word2.equals(""))
+                        continue;
+                    if(word1.equals(word2))
+                        continue;
+
                     WordTuple tuple = new WordTuple(text1,new Text(word2));
                     context.write(tuple,ONE);
                 }
