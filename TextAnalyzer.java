@@ -81,12 +81,6 @@ public class TextAnalyzer extends Configured implements Tool
                     }
                     if(word1.equals(""))
                         continue;
-                    // boundary condition
-                    if(j >= numWords + 1)
-                    {
-                        continue;
-                    }
-
                     String word2 = words[j];
                     if(word2.equals(""))
                         continue;
@@ -174,9 +168,6 @@ public class TextAnalyzer extends Configured implements Tool
     // Do not modify the main method
     public static void main(String[] args) throws Exception 
     {
-        /**
-         * TODO: TEST EVERYTHING!!!!
-         */
         int res = ToolRunner.run(new Configuration(), new TextAnalyzer(), args);
         System.exit(res);
     }
